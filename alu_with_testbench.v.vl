@@ -1,0 +1,338 @@
+//Multiplixer 2:1
+
+module mux_2to1( output  [7:0]   result, input [7:0] a, b, input sel );
+ assign result = (sel==1'b1 )? b : a; 
+endmodule
+
+                       ////////////////////
+ 
+  module onebit_adder( output result,output carry,input x,input y,input cin);
+    wire sm1,carry1,carry2; 
+    xor(sm1,x,y);
+    xor(result,sm1,cin);
+    and(carry1,x,y);
+    and(carry2,sm1,cin);
+    or(carry,carry1,carry2); 
+  endmodule 
+                     ///////////////////////////
+
+    module eightbit_adder( output[7:0] Arthimitic_result, output cout,input [7:0]A,input[7:0]B,input cin );
+     wire [6:0] carry;
+     onebit_adder bit0(Arthimitic_result[0],carry[0], A[0],B[0],cin); 
+     onebit_adder bit1( Arthimitic_result[1],carry[1], A[1],B[1],carry[0]);
+     onebit_adder bit2( Arthimitic_result[2],carry[2], A[2],B[2],carry[1]);
+     onebit_adder bit3( Arthimitic_result[3],carry[3], A[3],B[3],carry[2]); 
+     onebit_adder bit4( Arthimitic_result[4],carry[4], A[4],B[4],carry[3]);
+     onebit_adder bit5( Arthimitic_result[5],carry[5], A[5],B[5],carry[4]);
+     onebit_adder bit6( Arthimitic_result[6],carry[6], A[6],B[6],carry[5]); 
+     onebit_adder bit7( Arthimitic_result[7],cout, A[7],B[7],carry[6]); 
+    endmodule
+
+                  //////////////////////////
+
+// Compare operation:
+
+
+module comp(output [7:0] comp_result,input [7:0]result);
+mux_2to1 com_mx( comp_result, 8'b00000001,8'b00000000,((result== 8'b00000000)?1'b0:1'b1));
+endmodule
+                 //////////////////////////
+//Left Shift                 
+module left_shift(output [7:0] leftshift_result,input[7:0]B);
+assign leftshift_result ={B[6:0],1'b0};
+endmodule
+               //////////////////////////
+
+//Right Shift   
+module right_shift(output [7:0] rightshift_result,input[7:0]B);
+assign rightshift_result ={B[7],B[7:1]};
+endmodule
+            //////////////////////////
+//select between left and right
+
+module shift(output [7:0] shift_result, input [7:0]leftshift, input [7:0]rightshift,input [3:0]AluOp);
+mux_2to1 mx1( shift_result,leftshift, rightshift, AluOp[0]);
+endmodule
+            //////////////////////////
+//select between comp and shift
+module comp_shift(output [7:0] compshift_result,input [7:0] comp_result,input [7:0] shift_result,input [3:0]AluOp);
+mux_2to1 mx2( compshift_result,comp_result,shift_result, AluOp[1]);
+endmodule
+        ///////////////////////////////
+
+//!A
+module notA(output [7:0] NA, input [7:0] A);
+    nand f0(NA[0], A[0], A[0]);
+    nand f1(NA[1], A[1], A[1]);
+    nand f2(NA[2], A[2], A[2]);
+    nand f3(NA[3], A[3], A[3]);
+    nand f4(NA[4], A[4], A[4]);
+    nand f5(NA[5], A[5], A[5]);
+    nand f6(NA[6], A[6], A[6]);
+    nand f7(NA[7], A[7], A[7]);
+endmodule
+    ///////////////////////////////
+
+//A&B    
+module And(output [7:0] andAB, input [7:0] A, input [7:0] B);
+    and s0(andAB[0], A[0], B[0]);
+    and s1(andAB[1], A[1], B[1]);
+    and s2(andAB[2], A[2], B[2]);
+    and s3(andAB[3], A[3], B[3]);
+    and s4(andAB[4], A[4], B[4]);
+    and s5(andAB[5], A[5], B[5]);
+    and s6(andAB[6], A[6], B[6]);
+    and s7(andAB[7], A[7], B[7]);
+endmodule
+     ///////////////////////////////
+
+//A|B       
+module OR(output [7:0] orAB,input [7:0] A,input [7:0] B);
+    or r0(orAB[0], A[0], B[0]);
+    or r1(orAB[1], A[1], B[1]);
+    or r2(orAB[2], A[2], B[2]);
+    or r3(orAB[3], A[3], B[3]);
+    or r4(orAB[4], A[4], B[4]);
+    or r5(orAB[5], A[5], B[5]);
+    or r6(orAB[6], A[6], B[6]);
+    or r7(orAB[7], A[7], B[7]);
+endmodule
+      /////////////////////////////
+
+//NAND
+module NAND(  output [7:0] nandAB, input [7:0] A, input [7:0] B);
+    nand n0(nandAB[0], A[0], B[0]);
+    nand n1(nandAB[1], A[1], B[1]);
+    nand n2(nandAB[2], A[2], B[2]);
+    nand n3(nandAB[3], A[3], B[3]);
+    nand n4(nandAB[4], A[4], B[4]);
+    nand n5(nandAB[5], A[5], B[5]);
+    nand n6(nandAB[6], A[6], B[6]);
+    nand n7(nandAB[7], A[7], B[7]);
+endmodule
+  
+     /////////////////////////////
+
+// select between  not/and op  
+module notAnd(output [7:0]logic1,input [7:0]NA, input [7:0] andAB,input [3:0] AluOp);
+mux_2to1 ntand_mx(logic1,NA,andAB,AluOp[0]);
+endmodule
+    /////////////////////////////
+
+// select between or/nand op 
+module Or_Nand(output [7:0]logic2,input [7:0]orAB, input [7:0] nandAB,input [3:0] AluOp);
+mux_2to1 OrNand_mx(logic2,orAB,nandAB,AluOp[0]);
+endmodule
+       /////////////////////////////
+
+//Logic component
+module Logic_Result (output [7:0]Logic_Result,input[7:0]logic1,input [7:0]logic2,input [3:0] AluOp);
+mux_2to1 LR_mx(Logic_Result,logic1,logic2, AluOp[1]);
+endmodule
+      ///////////////////////////////
+
+//Rotation Left     
+module RotateLeft(output [7:0]LeftRot_result,input [7:0]A);
+assign LeftRot_result={A[6:0],A[7]};
+endmodule
+
+      ////////////////////////////////////
+
+//Rotation Right        
+module RotateRight(output [7:0]RightRot_result,input [7:0]A);
+assign RightRot_result={A[0],A[7:1]};
+endmodule
+      ////////////////////////////////////
+//select between rotation left and right
+
+module Rotation
+(output [7:0]rotation_result,input [7:0]LeftRot_result,input [7:0]RightRot_result,input[3:0]AluOp);
+mux_2to1 RT_mx(rotation_result,LeftRot_result,RightRot_result,AluOp[0]);
+endmodule
+
+      ////////////////////////////////////////////
+
+//select between main components
+module mux_4to1(output [7:0] result,input  [7:0] r1, r2, r3, r4,input  [1:0] sel);
+    wire [7:0] bottom, top;
+
+   
+    mux_2to1 mx0(bottom, r1, r2, sel[0]);  
+    mux_2to1 mx1(top,    r3, r4, sel[0]);
+
+   
+    mux_2to1 mx2(result, bottom, top, sel[1]);
+endmodule
+
+
+
+   ///////////////////////////////////////////////
+
+//ALU MODULE
+module ALU_8 (output [7:0] Result, output Zero, Negative, Overflow,
+input [7:0] A, B, input [3:0] AluOp);
+
+// declare  wires
+
+wire [7:0] NA, orAB, nandAB, andAB;
+wire [7:0] B_in, A_in;
+wire [7:0] Arthimitic_result_bus, compshift_result_bus, Logic_Result_bus, rotation_result_bus;
+wire [7:0]  LeftRot_result, RightRot_result;
+wire [7:0] LeftShift_result, RightShift_result,shift_result_bus, comp_result_bus;
+wire [7:0] logic1, logic2;
+wire cout;
+
+// A and B selection
+  mux_2to1 B_mx(B_in,B,8'b00000001,AluOp[1]);     
+   mux_2to1 A_Mx(A_in,A,~A,AluOp[0]); 
+
+
+// Instantiate the submodules
+
+// arithmetic
+eightbit_adder add(Arthimitic_result_bus, cout, A_in, B_in, AluOp[0]);
+
+
+// compare
+comp cmp(comp_result_bus,Arthimitic_result_bus);
+
+// Shift
+left_shift LS( LeftShift_result, B);
+right_shift RS(RightShift_result, B);
+shift Sh(shift_result_bus, LeftShift_result, RightShift_result, AluOp);
+
+// Comp/Shift select
+comp_shift CS(compshift_result_bus,comp_result_bus,shift_result_bus,AluOp);
+
+// Logic
+notA na(NA, A);
+And aand(andAB, A, B);
+OR  orr(orAB, A, B);
+NAND nnd(nandAB, A, B);
+
+//not/and select 
+notAnd NA1(logic1, NA, andAB, AluOp);
+
+//OR/NAND select 
+Or_Nand ORN(logic2, orAB, nandAB, AluOp);
+Logic_Result LR(Logic_Result_bus, logic1, logic2, AluOp);
+
+// Rotation
+RotateLeft RL(LeftRot_result, A);
+RotateRight RR(RightRot_result, A);
+Rotation RT(rotation_result_bus, LeftRot_result, RightRot_result, AluOp);
+
+
+
+// select between main modules
+mux_4to1 muxR(Result,Arthimitic_result_bus, compshift_result_bus,Logic_Result_bus,rotation_result_bus,AluOp[3:2]);
+
+
+assign Zero = (Result == 8'b0); 
+assign Negative=Result[7];
+
+assign Overflow = (((A[7] & B_in[7] & ~Result[7]) |
+                   (~A[7] & ~B_in[7] & Result[7])) 
+                   & ((AluOp == 4'b000)||((AluOp == 4'b010))))
+                   ||
+                   (((B[7] & ~A[7] & ~Result[7])| (~B[7] & A[7] & Result[7])) & (AluOp==4'b0001));
+
+
+endmodule
+
+`timescale 1ns/1ps
+
+module Testbench();
+    // Inputs
+    reg [7:0] A, B;
+    reg [3:0] AluOp;
+
+    // Outputs
+    wire [7:0] Result;
+    wire Zero, Negative, Overflow;
+
+    // Instantiate the ALU
+    ALU_8 Alu(
+        .Result(Result),
+        .Zero(Zero),
+        .Negative(Negative),
+        .Overflow(Overflow),
+        .A(A),
+        .B(B),
+        .AluOp(AluOp)
+    );
+
+    initial begin
+        $display("Time | AluOp | A       | B       | Result  | Zero | Negative | Overflow");
+        $display("--------------------------------------------------------------------");
+
+        //  (B+A) 
+        A = 8'd127; B = 8'd1; AluOp = 4'b0000; #5;
+        $display("%0t | %b | %0d | %0d | %0d | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        //(B-A) 
+        A = 8'd10; B = 8'd5; AluOp = 4'b0001; #5;
+        $display("%0t | %b | %0d | %0d | %0d | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        //(A+1)
+        A = 8'd137; B = 8'd0; AluOp = 4'b0010; #5;
+        $display("%0t | %b | %0d | %0d | %0d | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // (A==B)?
+        A = 8'd13; B = 8'd13; AluOp = 4'b0101; #5;
+        $display("%0t | %b | %0d | %0d | %0d | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        A = 8'd75; B = 8'd20; AluOp = 4'b0101; #5;
+        $display("%0t | %b | %0d | %0d | %0d | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // LEFT SHIFT of B 
+        A = 8'd0; B = 8'b01001111; AluOp = 4'b0110; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // RIGHT SHIFT of B 
+        A = 8'd0; B = 8'b10000011; AluOp = 4'b0111; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        //LEFT ROTATION of  A 
+        A = 8'b10011001; B = 8'd0; AluOp = 4'b1100; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // RIGHT ROTATION of  A 
+        A = 8'b10011001; B = 8'd0; AluOp = 4'b1101; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // NOT A 
+        A = 8'b10101010; B = 8'd0; AluOp = 4'b1000; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // A & B
+        A = 8'b10101010; B = 8'b01010101; AluOp = 4'b1001; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        // A | B 
+        A = 8'b10101010; B = 8'b01010101; AluOp = 4'b1010; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        //A nand B 
+        A = 8'b11110000; B = 8'b10101010; AluOp = 4'b1011; #5;
+        $display("%0t | %b | %b | %b | %b | %b | %b | %b",
+                 $time, AluOp, A, B, Result, Zero, Negative, Overflow);
+
+        $finish;
+    end
+endmodule
+
+
+
