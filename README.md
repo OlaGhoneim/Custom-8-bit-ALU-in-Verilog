@@ -131,7 +131,6 @@ A complete testbench is included in the same file to verify:
 ## Author
 
 Ola Ghoneim
-
 Computer Science Student
-
 Cairo University
+
