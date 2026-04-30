@@ -123,9 +123,9 @@ A complete testbench is included in the same `.vl` file to verify:
 * 2’s Complement Arithmetic
 
 
-👩‍💻 Author
+ Author
 
 Ola Ghoneim
 
-Computer Science Student
+Computer Science Student                                                                                                                                               
 Cairo University
