@@ -126,6 +126,5 @@ A complete testbench is included in the same `.vl` file to verify:
  Author
 
 Ola Ghoneim
-
-Computer Science Student                                                                                                                                               
+Computer Science Student                                                                                                                                           
 Cairo University
