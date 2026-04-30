@@ -105,7 +105,7 @@ A complete testbench is included in the same file to verify:
 2. Compile the file:
 
    ```
-   iverilog -o alu alu_with_testbench.v
+   iverilog -o alu alu_with_testbench.vl
    ```
 3. Run the simulation:
 
