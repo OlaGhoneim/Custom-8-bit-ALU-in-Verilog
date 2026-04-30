@@ -1,13 +1,13 @@
-# 🔧 Custom 8-bit ALU in Verilog
+#  Custom 8-bit ALU in Verilog
 
-## 📌 Overview
+##  Overview
 
 This project implements a custom **8-bit Arithmetic Logic Unit (ALU)** using Verilog HDL.
 The ALU performs arithmetic, logical, shift, rotation, and comparison operations based on a 4-bit control signal (`AluOp`), and generates status flags.
 
 ---
 
-## 🎓 Academic Context
+##  Academic Context
 
 **Cairo University**
 Faculty of Computing and Artificial Intelligence
@@ -17,15 +17,15 @@ This project was developed as an individual assignment for the **Computer Organi
 
 ---
 
-## ⚙️ ALU Specifications
+##  ALU Specifications
 
-### 🔹 Inputs
+###  Inputs
 
 * `A` → 8-bit input
 * `B` → 8-bit input
 * `AluOp` → 4-bit control signal
 
-### 🔹 Outputs
+###  Outputs
 
 * `Result` → 8-bit output
 * `Zero` → 1 if result is zero
@@ -34,7 +34,7 @@ This project was developed as an individual assignment for the **Computer Organi
 
 ---
 
-## 🔢 Supported Operations
+## Supported Operations
 
 | AluOp | Operation      | Description            |
 | ----- | -------------- | ---------------------- |
@@ -53,7 +53,7 @@ This project was developed as an individual assignment for the **Computer Organi
 
 ---
 
-## 🚩 Flags Behavior
+##  Flags Behavior
 
 * **Zero Flag** → Set when all bits of the result are 0
 * **Negative Flag** → Reflects the sign bit (MSB)
@@ -65,7 +65,7 @@ Special Case:
 
 ---
 
-## 🧩 Design Approach
+##  Design Approach
 
 * Fully modular design:
 
@@ -89,7 +89,7 @@ Special Case:
 
 ---
 
-## 🧪 Testbench
+##  Testbench
 
 A complete testbench is included in the same `.vl` file to verify:
 
@@ -99,7 +99,7 @@ A complete testbench is included in the same `.vl` file to verify:
 
 ---
 
-## ▶️ How to Run
+##  How to Run
 
 1. Open the project in a Verilog simulator (ModelSim / Vivado)
 2. Compile the `.vl` file
@@ -109,15 +109,10 @@ A complete testbench is included in the same `.vl` file to verify:
    * Console output
    * Waveform results
 
----
-
-## 📷 Simulation Output
-
-*Add your simulation screenshot here (recommended for GitHub)*
 
 ---
 
-## 💼 Skills Demonstrated
+##  Skills Demonstrated
 
 * Verilog HDL
 * Digital Logic Design
