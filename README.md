@@ -122,7 +122,6 @@ A complete testbench is included in the same `.vl` file to verify:
 * Testbench Development
 * 2’s Complement Arithmetic
 
-
  Author
 
 Ola Ghoneim
