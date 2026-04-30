@@ -1,15 +1,15 @@
-#  Custom 8-bit ALU in Verilog
+# Custom 8-bit ALU in Verilog
 
-##  Overview
+## Overview
 
 This project implements a custom **8-bit Arithmetic Logic Unit (ALU)** using Verilog HDL.
 The ALU performs arithmetic, logical, shift, rotation, and comparison operations based on a 4-bit control signal (`AluOp`), and generates status flags.
 
 ---
 
-##  Academic Context
+## Academic Context
 
-**Cairo University**
+Cairo University
 Faculty of Computing and Artificial Intelligence
 Department of Computer Science
 
@@ -17,15 +17,15 @@ This project was developed as an individual assignment for the **Computer Organi
 
 ---
 
-##  ALU Specifications
+## ALU Specifications
 
-###  Inputs
+### Inputs
 
 * `A` → 8-bit input
 * `B` → 8-bit input
 * `AluOp` → 4-bit control signal
 
-###  Outputs
+### Outputs
 
 * `Result` → 8-bit output
 * `Zero` → 1 if result is zero
@@ -53,25 +53,25 @@ This project was developed as an individual assignment for the **Computer Organi
 
 ---
 
-##  Flags Behavior
+## Flags Behavior
 
 * **Zero Flag** → Set when all bits of the result are 0
 * **Negative Flag** → Reflects the sign bit (MSB)
 * **Overflow Flag** → Indicates signed overflow in arithmetic operations
 
-Special Case:
+Special case:
 
-* `AluOp = 1111` → All flags are set to **1**
+* `AluOp = 1111` → All flags are set to 1
 
 ---
 
-##  Design Approach
+## Design Approach
 
 * Fully modular design:
 
   * Adder module (`adder_forALU`)
   * Multiplexer modules (`mux_forALU`)
-  * Logic unit modules
+  * Logic units
   * Shift and rotation modules
 
 * Structural modeling used for:
@@ -82,48 +82,54 @@ Special Case:
 
 * Behavioral modeling used where appropriate
 
-* Operation selection implemented using **multiplexers only**
-  (No `if` or `case` statements inside ALU module)
+* Operation selection implemented using multiplexers only
+  (No `if` or `case` statements inside the ALU module)
 
-* Supports **2’s complement signed arithmetic**
+* Uses 2’s complement representation for signed arithmetic
 
 ---
 
-##  Testbench
+## Testbench
 
-A complete testbench is included in the same `.vl` file to verify:
+A complete testbench is included in the same file to verify:
 
 * All ALU operations
 * Flag correctness (Zero, Negative, Overflow)
-* Edge cases (overflow, negative results, equality checks)
+* Edge cases such as overflow and equality
 
 ---
 
-##  How to Run
+## How to Run
 
-1. Open the project in a Verilog simulator (ModelSim / Vivado)
-2. Compile the `.vl` file
-3. Run the testbench
-4. Observe:
+1. Open the project in a Verilog simulator (ModelSim, Vivado, or Icarus Verilog)
+2. Compile the file:
 
-   * Console output
-   * Waveform results
+   ```
+   iverilog -o alu alu_with_testbench.v
+   ```
+3. Run the simulation:
 
+   ```
+   vvp alu
+   ```
+4. Observe the output in the terminal or waveform viewer
 
 ---
 
-##  Skills Demonstrated
+## Skills Demonstrated
 
 * Verilog HDL
 * Digital Logic Design
-* ALU Architecture
+* ALU Design and Architecture
 * Structural Modeling
 * Modular Design
 * Testbench Development
 * 2’s Complement Arithmetic
 
+---
 
- Author
+## Author
 
 Ola Ghoneim
 Computer Science Student
+Cairo University
